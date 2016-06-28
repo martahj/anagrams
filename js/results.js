@@ -7,6 +7,8 @@ const resultsList = path.join(__dirname, '../resultsList.txt');
 const Results = {};
 module.exports = Results;
 
-Results.storeResult = (original, anagrams) => {
-	return getResults.store(resultsList, resultsFolder, original, anagrams);
+Results.storeResult = (original, anagrams, onlyEnglish) => {
+	let tag = onlyEnglish ? 'only-english' : 'all-anagrams';
+	let phrase = orginal + '__' + tag;
+	return getResults.store(resultsList, resultsFolder, phrase, anagrams);
 }
