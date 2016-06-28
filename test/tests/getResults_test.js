@@ -7,7 +7,7 @@ const path = require('path');
 const testList = path.join(__dirname, '../test_resultsList.txt');
 const testFolder = path.join(__dirname, '../test_results');
 
-xdescribe('**** getResults ****', function() {
+describe('**** getResults ****', function() {
 
 	let line1 = 'sample1';
 	let line2 = 'sample 2';

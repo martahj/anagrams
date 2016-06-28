@@ -5,8 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const rmdir = require('rmdir');
 
-
 const getResults = {};
+module.exports = getResults;
 
 getResults.store = (listpath, resultsFolder, originalPhrase, anagramsArray) => {
 
@@ -138,5 +138,3 @@ getResults.fileToText = (filepath) => {
 		})
 	})
 }
-
-module.exports = getResults;
