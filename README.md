@@ -49,3 +49,9 @@ In the terminal, run 'npm install'
 <p>
 In the terminal, run 'npm run anagrams'. Follow the instructions that appear in the command line.
 </p>
+
+<h3>6) Check out your results</h3>
+<p>
+Check inside the folder 'results' for a file with a name corresponding to the phrase you entered.
+This file should contain a list of all the anagrams.
+</p>
