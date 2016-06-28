@@ -23,8 +23,15 @@ where you want to keep this repo using the following commands:
     'cd foldername' will take you down into a folder - for example, from Documents/ running 'cd Hello' will take you into
     Documents/Hello
   </li>
+  <li>
+    'ls' will show you all the folders and files inside your current folder.
+  </li>
 </ul>
-Once you are in the folder you want, 
+Once you are in the folder you want, go to the main page on this repo. There should be a green button saying something
+like 'Clone or download'. Click on that and copy the url it shows you.
+<br>
+Now go back to your command line and run 'git clone pastedurl' (pasting in the url instead of writing pastedurl).
+Now if you look at the contents of your current folder (by running 'ls'), you should see your new repo!
 </p>
 
 
