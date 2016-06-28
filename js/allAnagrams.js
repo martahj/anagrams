@@ -1,3 +1,5 @@
+"use strict"
+
 function allAnagrams (string) {
   
   let sorted = string.split('').sort()
