@@ -8,6 +8,28 @@ const rmdir = require('rmdir');
 
 const getResults = {};
 
+getResults.store = (listpath, resultsFolder, originalPhrase, anagramsArray) => {
+
+	let newFileName = originalPhrase + '.txt';
+
+	return getResults.textInList(listpath, originalPhrase)
+	  .then( already => {
+	  	if (already) {
+	  		return;
+	  	} else {
+	  		return new Promise( (resolve, reject) => {
+	  		  return getResults.addToList(listpath, originalPhrase)
+	  		    .then( () => getResults.arrayToFile(resultsFolder, newFileName, anagramsArray) )
+	  		    .then( () => resolve() )
+	  		    .catch( err => reject(err) )
+	  		})
+	  	}
+	  })
+}
+
+getResults.arrayToFile = (folderpath, filename, arr) => {
+	return getResults.makeFile(folderpath, filename, arr.join('\n'));
+}
 
 getResults.resetDirectory = (folderpath) => {
 	return getResults.deleteDirectory(folderpath)
@@ -29,21 +51,11 @@ getResults.makeDirectory = (folderpath) => {
 getResults.deleteDirectory = (folderpath) => {
 	return new Promise( (resolve, reject) => {
 		rmdir(folderpath, function(err, dirs, files) {
-			console.log('dirs', dirs);
-			console.log('files', files);
 			if (err) {
 				reject(err);
 			} else {
 				resolve();
 			}
-		})
-	})
-}
-
-getResults.deleteFile = (filepath) => {
-	return new Promise( (resolve, reject) => {
-		fs.rmdir(filepath, function(err) {
-			//
 		})
 	})
 }

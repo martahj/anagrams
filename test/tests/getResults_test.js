@@ -14,6 +14,12 @@ describe('**** getResults ****', function() {
 
 	let line1Text = 'SOME text i dunno';
 
+	let fullGo = {
+		name: 'yay so fun!',
+		anagrams: ['jk', 'not anagrams at all', 'nopez', 'yay so fun!']
+	}
+	let lineCount;
+
 	before( function() {
 		return getResults.clear(testList)
 		  .then( () => getResults.resetDirectory(testFolder) )
@@ -22,7 +28,6 @@ describe('**** getResults ****', function() {
 	it('reads a file', function() {
 		return getResults.fileToText(testList)
 		  .then( data => {
-		  	console.log('read data', data);
 		  	expect(data).to.be.a('string');
 		  })
 	})
@@ -51,7 +56,6 @@ describe('**** getResults ****', function() {
 		  .then( () => getResults.addToList(testList, line2) )
 		  .then( () => getResults.fileToText(testList) )
 		  .then( text => {
-		  	console.log('got text', text);
 		  	expect(text).to.be.a('string');
 		  	expect(text.length > 0).to.be.true;
 		  	expect(text.indexOf('\n') > -1).to.be.true;
@@ -94,7 +98,6 @@ describe('**** getResults ****', function() {
 		  	return getResults.fileToText(pathToContent)
 		  })
 		  .then( content => {
-		  	console.log('content', content)
 		  	expect(content).to.be.a('string');
 		  	expect(content.length > 0).to.be.true;
 		  })
@@ -108,8 +111,46 @@ describe('**** getResults ****', function() {
 		  })
 	})
 
-	xit('reads an array to a new text file', function() {
-		expect(false).to.be.true;
+	it('reads an array to a new text file', function() {
+		let arr = ['hi hi', 'WHATS UP'];
+		let target = 'test1.txt';
+
+		return getResults.arrayToFile(testFolder, target, arr)
+		  .then( () => getResults.fileToText(path.join(testFolder, target)) )
+		  .then( text => {
+		  	expect(text).to.be.a('string');
+		  	expect(text).to.equal(arr.join('\n'));
+		  })
+	})
+
+	it('stores anagrams', function() {
+		return getResults.store(testList, testFolder, fullGo.name, fullGo.anagrams)
+		  .then( () => getResults.alreadyAnagrammed(testList) )
+		  .then( already => {
+		  	expect(already).to.be.an('array');
+		  	expect(already).to.have.length(3);
+
+		  	return getResults.doesFileExist(testFolder, fullGo.name + '.txt')
+		  })
+		  .then( exists => {
+		  	expect(exists).to.be.true;
+
+		  	let filepath = path.join(testFolder, fullGo.name + '.txt');
+		  	return getResults.fileToText(filepath)
+		  })
+		  .then( text => {
+		  	expect(text).to.be.a('string');
+		  	expect(text).to.equal(fullGo.anagrams.join('\n'));
+		  })
+	})
+
+	it('does not add anything new if the thing already exists', function() {
+		return getResults.store(testList, testFolder, fullGo.name, fullGo.anagrams)
+		.then( () => getResults.alreadyAnagrammed(testList) )
+		.then( already => {
+			expect(already).to.be.an('array');
+			expect(already).to.have.length(3);
+		})
 	})
 
 })
