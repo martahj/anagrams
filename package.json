@@ -4,7 +4,8 @@
   "description": "",
   "main": "anagrams.js",
   "scripts": {
-    "test": "bash ./test/run.sh"
+    "test": "bash ./test/run.sh",
+    "anagrams": "node run/run"
   },
   "author": "",
   "license": "ISC",
