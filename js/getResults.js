@@ -3,21 +3,78 @@
 const Promise = require('bluebird');
 const path = require('path');
 const fs = require('fs');
+const rmdir = require('rmdir');
 
-const resultsFolder = path.join(__dirname, 'results');
 
 const getResults = {};
 
+
+getResults.resetDirectory = (folderpath) => {
+	return getResults.deleteDirectory(folderpath)
+	   .then( () => getResults.makeDirectory(folderpath) )
+}
+
+getResults.makeDirectory = (folderpath) => {
+	return new Promise( (resolve, reject) => {
+		fs.mkdir(folderpath, function(err) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		})
+	})
+}
+
+getResults.deleteDirectory = (folderpath) => {
+	return new Promise( (resolve, reject) => {
+		rmdir(folderpath, function(err, dirs, files) {
+			console.log('dirs', dirs);
+			console.log('files', files);
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		})
+	})
+}
+
+getResults.deleteFile = (filepath) => {
+	return new Promise( (resolve, reject) => {
+		fs.rmdir(filepath, function(err) {
+			//
+		})
+	})
+}
+
+getResults.doesFileExist = (folderPath, name) => {
+	return new Promise( (resolve, reject) => {
+		let sitePath = path.join(folderPath, name);
+
+		fs.exists(sitePath, function(exists) {
+			resolve(exists);
+		})
+	})
+}
+
+getResults.makeFile = (folderPath, filename, fileText) => {
+	return new Promise( (resolve, reject) => {
+		let newFile = path.join(folderPath, filename);
+		fs.writeFile(newFile, fileText, function(err) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		})
+	})
+}
+
+
 getResults.addToList = (filepath, text) => {
-	return getResults.textInList(filepath, text)
-	  .then( alreadyThere => {
-	  	if (alreadyThere) {
-	  		return;
-	  	} else {
-	  		let textForList = text + '\n';
-	  		return getResults.addTextToFile(filepath, textForList);
-	  	}
-	  })
+	let textForList = text + '\n';
+	return getResults.addTextToFile(filepath, textForList);
 }
 
 getResults.textInList = (filepath, text) => {

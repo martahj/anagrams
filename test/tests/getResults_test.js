@@ -5,21 +5,19 @@ const getResults = require('../../js/getResults.js')
 const path = require('path');
 
 const testList = path.join(__dirname, '../test_resultsList.txt');
+const testFolder = path.join(__dirname, '../test_results');
 
 describe('**** getResults ****', function() {
 
 	let line1 = 'sample1';
 	let line2 = 'sample 2';
 
+	let line1Text = 'SOME text i dunno';
+
 	before( function() {
-		return getResults.clear(testList);
+		return getResults.clear(testList)
+		  .then( () => getResults.resetDirectory(testFolder) )
 	});
-
-	// xit('writes data to a file', function() {
-	// 	let txt = '\nblah blah blah!';
-
-	// 	// return 
-	// })
 
 	it('reads a file', function() {
 		return getResults.fileToText(testList)
@@ -81,27 +79,37 @@ describe('**** getResults ****', function() {
 		  })
 	})
 
-	it('does not add an anagram to the list of it is already there', function() {
-		let originalLength;
+	it('creates a file and can tell if it exists or not', function() {
+		return getResults.doesFileExist(testFolder, line1 + '.txt')
+		  .then( exists => {
+		  	expect(exists).to.be.false;
 
-		return getResults.alreadyAnagrammed(testList)
-		  .then( list => {
-		  	originalLength = list.length;
-
-		  	return getResults.addToList(testList, line1)
+		  	return getResults.makeFile(testFolder, line1 + '.txt', line1Text)
 		  })
-		  .then( () => getResults.alreadyAnagrammed(testList) )
-		  .then( list => {
-		  	expect(list).to.be.an('array');
-		  	expect(list.length).to.equal(originalLength);
+		  .then( () => getResults.doesFileExist(testFolder, line1 + '.txt') )
+		  .then( exists => {
+		  	expect(exists).to.be.true;
+
+		  	let pathToContent = path.join(testFolder, line1 + '.txt');
+		  	return getResults.fileToText(pathToContent)
+		  })
+		  .then( content => {
+		  	console.log('content', content)
+		  	expect(content).to.be.a('string');
+		  	expect(content.length > 0).to.be.true;
 		  })
 	})
 
-	xit('adds an anagram to the list already looked up', function() {
-		expect(false).to.be.true;
+	it('clears a directory', function() {
+		return getResults.resetDirectory(testFolder)
+		  .then( () => getResults.doesFileExist(testFolder, line1 + '.txt') )
+		  .then( exists => {
+		  	expect(exists).to.be.false;
+		  })
 	})
 
 	xit('reads an array to a new text file', function() {
 		expect(false).to.be.true;
 	})
+
 })

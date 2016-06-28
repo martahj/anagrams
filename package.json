@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.4.1",
+    "rmdir": "^1.2.0",
     "wordlist-english": "^1.1.0"
   },
   "devDependencies": {
